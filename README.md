@@ -14,3 +14,6 @@ Every change pushed to `main` is built automatically by GitHub:
 - `Soubenco-PlayStore-bundle` — AAB to upload to Google Play (needs the signing key secrets).
 
 Store listing images: `store-icon-512.png`, `store-feature-1024x500.png`.
+
+## Website source (backup)
+`website/` holds the soubenco.com design (`theme-soubenco`) and shop engine (`plugin-soubenco-core`) installed on the WordPress site. These are a backup copy only — the app build ignores them.
