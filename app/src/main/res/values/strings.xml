@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Soubenco</string>
+    <string name="offline_title">You are offline</string>
+    <string name="offline_body">Check your internet connection. Your cart and wishlist are saved.</string>
+    <string name="retry">Try again</string>
+</resources>

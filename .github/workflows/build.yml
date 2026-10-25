@@ -1,0 +1,48 @@
+name: Build Soubenco app
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HAS_KEY: ${{ secrets.SOUBENCO_KEYSTORE_BASE64 != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      # Optional: a permanent signing key for Google Play (added later as repository secrets).
+      - name: Prepare signing key
+        if: env.HAS_KEY == 'true'
+        run: echo "${{ secrets.SOUBENCO_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/soubenco.jks"
+
+      - name: Build test app (APK) and Play Store bundle (AAB)
+        env:
+          SOUBENCO_KEYSTORE_PATH: ${{ runner.temp }}/soubenco.jks
+          SOUBENCO_KEYSTORE_PASSWORD: ${{ secrets.SOUBENCO_KEYSTORE_PASSWORD }}
+          SOUBENCO_KEY_ALIAS: ${{ secrets.SOUBENCO_KEY_ALIAS }}
+          SOUBENCO_KEY_PASSWORD: ${{ secrets.SOUBENCO_KEY_PASSWORD }}
+        run: gradle --no-daemon assembleDebug bundleRelease
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Soubenco-app-install-on-phone
+          path: app/build/outputs/apk/debug/*.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Soubenco-PlayStore-bundle
+          path: app/build/outputs/bundle/release/*.aab

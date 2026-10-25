@@ -1,0 +1,8 @@
+<resources>
+    <color name="brand_violet">#6014EA</color>
+    <color name="brand_orchid">#C86DE6</color>
+    <color name="ink">#15121F</color>
+    <color name="muted">#6E6A80</color>
+    <color name="page_bg">#FFFFFF</color>
+    <color name="icon_bg">#FFFFFF</color>
+</resources>
