@@ -1,8 +1,29 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-/** Shop categories in display order (Soubenco's own list first). */
+/**
+ * Browsing categories (menu, homepage, filters): the groups inside each main category.
+ * A main category without groups is shown as itself.
+ */
 function sbt_shop_categories() {
+	static $list = null;
+	if ( null !== $list ) return $list;
+	$list = array();
+	foreach ( sbt_top_categories() as $top ) {
+		$kids = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => false, 'parent' => $top->term_id ) );
+		$kids = is_wp_error( $kids ) ? array() : array_values( array_filter( $kids, function ( $k ) { $k->count = sbt_cat_count( $k ); return $k->count > 0; } ) );
+		if ( $kids ) {
+			usort( $kids, function ( $a, $b ) { return $b->count - $a->count; } );
+			$list = array_merge( $list, $kids );
+		} else {
+			$list[] = $top;
+		}
+	}
+	return $list;
+}
+
+/** Main (top-level) categories, e.g. for the footer. */
+function sbt_top_categories() {
 	static $cache = null;
 	if ( null !== $cache ) return $cache;
 	$terms = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => false, 'parent' => 0 ) );
@@ -58,7 +79,7 @@ function sbt_category_icon( $slug, $size = 30 ) {
 		'bolt'      => '<path d="M13 2 5 13.5h6L10 22l8-11.5h-6L13 2Z"/>',
 	);
 	$map = array(
-		'tv-entertainment' => 'tv', 'fans-cooling' => 'fan', 'kitchen' => 'cooker', 'home-appliances' => 'washer', 'lighting-accessories' => 'bulb',
+		'tv-entertainment' => 'tv', 'fans-cooling' => 'fan', 'kitchen' => 'cooker', 'home-appliances' => 'washer', 'household' => 'washer', 'electronics' => 'tv', 'lighting-accessories' => 'bulb',
 		'refrigerator' => 'fridge', 'fridge' => 'fridge', 'freezer' => 'fridge',
 		'air-condition' => 'ac', 'air-cooler' => 'ac', 'cooler' => 'ac',
 		'washing' => 'washer', 'microwave' => 'microwave', 'oven' => 'microwave',
