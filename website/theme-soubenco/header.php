@@ -18,7 +18,7 @@ $cats     = sbt_shop_categories();
 $shop     = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' );
 $acc      = function_exists( 'sb_account_url' ) ? sb_account_url() : home_url( '/' );
 $announce = get_option( 'sb_announcement', 'Delivery all over Bangladesh · Genuine products · Secure payment' );
-$hotline  = get_option( 'sb_hotline' );
+$wa_num   = preg_replace( '/\D/', '', (string) get_option( 'sb_whatsapp' ) );
 ?>
 <a class="sb-skip" href="#sb-main">Skip to content</a>
 
@@ -27,7 +27,7 @@ $hotline  = get_option( 'sb_hotline' );
 	<div class="sb-container sb-announce-in">
 		<span><?php echo esc_html( $announce ); ?></span>
 		<span class="sb-announce-right">
-			<?php if ( $hotline ) : ?><a href="tel:<?php echo esc_attr( preg_replace( "/[^0-9+]/", "", $hotline ) ); ?>"><?php echo sb_icon( 'phone', 14 ); ?> <?php echo esc_html( $hotline ); ?></a><?php endif; ?>
+			<?php if ( $wa_num ) : ?><a href="https://wa.me/<?php echo esc_attr( $wa_num ); ?>" target="_blank" rel="noopener"><?php echo sb_icon( 'whatsapp', 14 ); ?> WhatsApp <?php echo esc_html( sbt_format_bd_number( $wa_num ) ); ?></a><?php endif; ?>
 			<?php if ( get_option( 'sb_app_link' ) ) : ?><a href="<?php echo esc_url( get_option( 'sb_app_link' ) ); ?>">Get the app</a><?php endif; ?>
 		</span>
 	</div>

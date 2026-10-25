@@ -414,7 +414,7 @@ add_action( 'admin_post_sb_studio_trash', function () {
 function sb_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) return;
 	if ( isset( $_POST['sb_settings_nonce'] ) && wp_verify_nonce( $_POST['sb_settings_nonce'], 'sb_settings' ) ) {
-		foreach ( array( 'sb_app_link', 'sb_hotline', 'sb_whatsapp', 'sb_facebook', 'sb_instagram', 'sb_youtube', 'sb_announcement', 'sb_address' ) as $k ) {
+		foreach ( array( 'sb_app_link', 'sb_email', 'sb_whatsapp', 'sb_facebook', 'sb_instagram', 'sb_youtube', 'sb_announcement', 'sb_address' ) as $k ) {
 			update_option( $k, sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) );
 		}
 		update_option( 'sb_email_notifications', ! empty( $_POST['sb_email_notifications'] ) ? 'yes' : 'no' );
@@ -426,7 +426,7 @@ function sb_settings_page() {
 		<?php wp_nonce_field( 'sb_settings', 'sb_settings_nonce' ); ?>
 		<h2>Store contact</h2>
 		<div class="sbs-grid">
-			<label class="sbs-field"><span>Hotline</span><input name="sb_hotline" value="<?php echo esc_attr( get_option( 'sb_hotline' ) ); ?>" placeholder="e.g. 01XXXXXXXXX"></label>
+			<label class="sbs-field"><span>Contact email</span><input name="sb_email" type="email" value="<?php echo esc_attr( get_option( 'sb_email' ) ); ?>" placeholder="e.g. soubenco@gmail.com"></label>
 			<label class="sbs-field"><span>WhatsApp number</span><input name="sb_whatsapp" value="<?php echo esc_attr( get_option( 'sb_whatsapp' ) ); ?>" placeholder="e.g. 8801XXXXXXXXX"></label>
 			<label class="sbs-field sbs-span-2"><span>Store / office address</span><input name="sb_address" value="<?php echo esc_attr( get_option( 'sb_address' ) ); ?>"></label>
 			<label class="sbs-field"><span>Facebook page link</span><input name="sb_facebook" value="<?php echo esc_attr( get_option( 'sb_facebook' ) ); ?>"></label>

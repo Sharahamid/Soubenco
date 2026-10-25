@@ -10,7 +10,7 @@ $social = array_filter( array(
 	'Instagram' => get_option( 'sb_instagram' ),
 	'YouTube'   => get_option( 'sb_youtube' ),
 ) );
-$hot = get_option( 'sb_hotline' ); $wa = get_option( 'sb_whatsapp' ); $addr = get_option( 'sb_address' );
+$wa = preg_replace( '/\D/', '', (string) get_option( 'sb_whatsapp' ) ); $addr = get_option( 'sb_address' ); $email = get_option( 'sb_email' ) ?: get_option( 'admin_email' );
 ?>
 <section class="sb-trust sb-hide-app">
 	<div class="sb-container sb-trust-in">
@@ -48,9 +48,8 @@ $hot = get_option( 'sb_hotline' ); $wa = get_option( 'sb_whatsapp' ); $addr = ge
 		</div>
 		<div>
 			<h4>Contact</h4>
-			<?php if ( $hot ) : ?><a href="tel:<?php echo esc_attr( preg_replace( "/[^0-9+]/", "", $hot ) ); ?>"><?php echo sb_icon( 'phone', 16 ); ?> <?php echo esc_html( $hot ); ?></a><?php endif; ?>
-			<?php if ( $wa ) : ?><a href="https://wa.me/<?php echo esc_attr( preg_replace( '/\D/', '', $wa ) ); ?>" target="_blank" rel="noopener"><?php echo sb_icon( 'phone', 16 ); ?> WhatsApp</a><?php endif; ?>
-			<a href="mailto:<?php echo esc_attr( get_option( 'admin_email' ) ); ?>"><?php echo sb_icon( 'mail', 16 ); ?> <?php echo esc_html( get_option( 'admin_email' ) ); ?></a>
+			<?php if ( $wa ) : ?><a href="https://wa.me/<?php echo esc_attr( preg_replace( '/\D/', '', $wa ) ); ?>" target="_blank" rel="noopener"><?php echo sb_icon( 'whatsapp', 16 ); ?> WhatsApp <?php echo esc_html( sbt_format_bd_number( $wa ) ); ?></a><?php endif; ?>
+			<a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo sb_icon( 'mail', 16 ); ?> <?php echo esc_html( $email ); ?></a>
 			<?php if ( $addr ) : ?><span class="sb-footer-addr"><?php echo sb_icon( 'pin', 16 ); ?> <?php echo esc_html( $addr ); ?></span><?php endif; ?>
 		</div>
 	</div>

@@ -5,13 +5,21 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function sbt_shop_categories() {
 	static $cache = null;
 	if ( null !== $cache ) return $cache;
-	$terms = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => false, 'parent' => 0, 'orderby' => 'count', 'order' => 'DESC' ) );
+	$terms = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => false, 'parent' => 0 ) );
 	if ( is_wp_error( $terms ) ) $terms = array();
 	$default = (int) get_option( 'default_product_cat' );
 	$hidden  = array( 'n-a', 'na', 'uncategorized', 'others', 'other' );
 	$cache = array_values( array_filter( $terms, function ( $t ) use ( $default, $hidden ) {
-		return $t->term_id !== $default && ! in_array( $t->slug, $hidden, true ) && $t->count > 0 && ! get_term_meta( $t->term_id, 'sb_hide', true );
+		if ( $t->term_id === $default || in_array( $t->slug, $hidden, true ) || get_term_meta( $t->term_id, 'sb_hide', true ) ) return false;
+		$t->count = sbt_cat_count( $t );
+		return $t->count > 0;
 	} ) );
+	usort( $cache, function ( $a, $b ) {
+		$oa = (int) get_term_meta( $a->term_id, 'sb_order', true ); $ob = (int) get_term_meta( $b->term_id, 'sb_order', true );
+		if ( $oa && $ob && $oa !== $ob ) return $oa - $ob;
+		if ( $oa xor $ob ) return $oa ? -1 : 1;
+		return $b->count - $a->count;
+	} );
 	return $cache;
 }
 
@@ -50,6 +58,7 @@ function sbt_category_icon( $slug, $size = 30 ) {
 		'bolt'      => '<path d="M13 2 5 13.5h6L10 22l8-11.5h-6L13 2Z"/>',
 	);
 	$map = array(
+		'tv-entertainment' => 'tv', 'fans-cooling' => 'fan', 'kitchen' => 'cooker', 'home-appliances' => 'washer', 'lighting-accessories' => 'bulb',
 		'refrigerator' => 'fridge', 'fridge' => 'fridge', 'freezer' => 'fridge',
 		'air-condition' => 'ac', 'air-cooler' => 'ac', 'cooler' => 'ac',
 		'washing' => 'washer', 'microwave' => 'microwave', 'oven' => 'microwave',
@@ -92,4 +101,12 @@ function sbt_hidden_brand_ids() {
 		if ( $t ) $ids[] = $t->term_id;
 	}
 	return $ids;
+}
+
+/** Products in a category including everything in its sub-categories. */
+function sbt_cat_count( $term ) {
+	$total = (int) $term->count;
+	$kids  = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => false, 'child_of' => $term->term_id, 'fields' => 'all' ) );
+	if ( ! is_wp_error( $kids ) ) foreach ( $kids as $k ) $total += (int) $k->count;
+	return $total;
 }

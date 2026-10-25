@@ -171,6 +171,7 @@ function sb_icon( $name, $size = 20 ) {
 		'filter'  => '<path d="M4 5h16l-6 8v6l-4-2v-4L4 5Z"/>',
 		'eye'     => '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
 		'clock'   => '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+		'whatsapp'=> '<path d="M4 20l1.2-3.8A8 8 0 1 1 8 19z"/><path d="M9 9.5c0 2.5 2.5 5 5 5l1.2-1.2-1.8-1-.8.6c-.8-.3-1.7-1.2-2-2l.6-.8-1-1.8z"/>',
 		'star'    => '<path d="m12 3 2.8 5.8 6.2.9-4.5 4.4 1 6.2L12 17.4 6.5 20.3l1-6.2L3 9.7l6.2-.9L12 3Z"/>',
 	);
 	$d = isset( $p[ $name ] ) ? $p[ $name ] : $p['box'];

@@ -147,3 +147,10 @@ add_action( 'template_redirect', function () {
 	echo '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>Soubenco</title><body style="margin:0;display:grid;place-items:center;min-height:100vh;font-family:system-ui;background:#F7F6FB;color:#15121F;text-align:center"><div><img src="' . esc_url( get_template_directory_uri() . '/assets/img/logo-stacked.png' ) . '" alt="Soubenco" style="width:220px"><p>We are setting things up. Please check back shortly.</p></div></body>';
 	exit;
 }, 0 );
+
+/** 8801947377575 -> +880 1947-377575 */
+function sbt_format_bd_number( $digits ) {
+	$d = preg_replace( '/\D/', '', (string) $digits );
+	if ( 13 === strlen( $d ) && 0 === strpos( $d, '880' ) ) return '+880 ' . substr( $d, 3, 4 ) . '-' . substr( $d, 7 );
+	return $d ? '+' . $d : '';
+}
