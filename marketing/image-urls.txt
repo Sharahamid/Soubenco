@@ -20,3 +20,9 @@
 240 2026/03/Haier-43-4K-Google-TV-H43K800UX.jpeg
 443 2026/03/Candy-by-Haier-40-Android-Smart-FHD-TV-C40K6FG.png
 460 2026/03/Kiam-Infrared-Cooker-H-10.jpeg
+315 2026/03/Haier-7kg-Top-Load-Automatic-Washing-Machine-HWM70-1269S5.jpeg
+335 2026/03/Hisense-20L-Solo-MWO-with-Grey-Cavity-H20MOBS2H.png
+357 2026/03/Whirlpool-Refrigerator-IF-INV-258-STEEL-ONYX-BD-245-L-No-Frost.jpg
+465 2026/03/Vision-Induction-Cooker-VSN-IND-XI211.png
+331 2026/03/Kiam-Premium-Induction-Cooker-H-22.png
+515 2026/03/HAMKO-HB1-02-Mixer-Grinder-Classic-Blender-HC-850W.jpeg
