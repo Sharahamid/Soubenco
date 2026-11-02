@@ -1,0 +1,34 @@
+name: Fetch product photos
+
+# Downloads the product photos listed in marketing/image-urls.txt from soubenco.com
+# into marketing/product-photos/ (used to design social media posts).
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths: [ 'marketing/image-urls.txt' ]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download photos
+        run: |
+          mkdir -p marketing/product-photos
+          while read -r code path; do
+            [ -z "$code" ] && continue
+            ext="${path##*.}"
+            curl -fsSL --retry 3 -A "Mozilla/5.0 Soubenco-Assets" "https://soubenco.com/wp-content/uploads/$path" -o "marketing/product-photos/$code.$ext"
+          done < marketing/image-urls.txt
+          ls -la marketing/product-photos
+      - name: Save to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898099+github-actions[bot]@users.noreply.github.com"
+          git add marketing/product-photos
+          git diff --cached --quiet || git commit -m "Product photos for social media posts"
+          git push
