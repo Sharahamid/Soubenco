@@ -21,7 +21,7 @@ $keep    = array_filter( array( 's' => get_search_query(), 'post_type' => is_sea
 	<header class="sb-shop-head">
 		<div>
 			<h1><?php echo esc_html( $title ); ?></h1>
-			<p class="sb-muted"><?php echo $found ? esc_html( $found . ' ' . _n( 'product', 'products', $found ) ) : 'No products yet'; ?><?php if ( $term && $term->description ) echo ' · ' . esc_html( wp_strip_all_tags( $term->description ) ); ?></p>
+			<p class="sb-muted"><?php echo $found ? esc_html( $found . ' ' . _n( 'product', 'products', $found ) ) : ( ! empty( $_GET ) ? 'No products match these filters' : 'No products yet' ); ?><?php if ( $term && $term->description ) echo ' · ' . esc_html( wp_strip_all_tags( $term->description ) ); ?></p>
 		</div>
 		<?php if ( $subcats && ! is_wp_error( $subcats ) ) : ?>
 			<div class="sb-chips">
@@ -112,7 +112,7 @@ $keep    = array_filter( array( 's' => get_search_query(), 'post_type' => is_sea
 				<div class="sb-empty">
 					<div class="sb-empty-ic"><?php echo sb_icon( 'search', 34 ); ?></div>
 					<h3>No products found</h3>
-					<p class="sb-muted"><?php echo is_search() ? 'Try a different word, or check the spelling.' : 'New products are added regularly — please check back soon.'; ?></p>
+					<p class="sb-muted"><?php echo is_search() ? 'Try a different word, or check the spelling.' : ( ! empty( $_GET ) ? 'Try removing a filter or widening the price range.' : 'New products are added regularly — please check back soon.' ); ?></p>
 					<a class="sb-btn sb-btn-primary" href="<?php echo esc_url( $shop ); ?>">See all products</a>
 				</div>
 			<?php endif; ?>

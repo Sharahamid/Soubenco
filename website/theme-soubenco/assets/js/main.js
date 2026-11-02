@@ -351,6 +351,16 @@
 		$$('[data-sb-drawer-open]').forEach(function (b) { b.addEventListener('click', function () { drawer.hidden = false; document.body.style.overflow = 'hidden'; }); });
 		$$('[data-sb-drawer-close]').forEach(function (b) { b.addEventListener('click', function () { drawer.hidden = true; document.body.style.overflow = ''; }); });
 		var fl = $('[data-sb-filters]'), fbg = $('.sb-filters-bg');
+		// Don't send empty boxes (e.g. a blank price) with the filter or sort forms.
+		$$('.sb-filters form, form.sb-sort').forEach(function (f) {
+			f.addEventListener('submit', function () {
+				$$('input', f).forEach(function (i) { if ((i.type === 'number' || i.type === 'hidden' || i.type === 'text') && i.value.trim() === '') i.disabled = true; });
+			});
+		});
+		// Brand / show-only ticks apply straight away.
+		$$('.sb-filters .sb-filter-checks input').forEach(function (c) {
+			c.addEventListener('change', function () { var f = c.form; if (f.requestSubmit) f.requestSubmit(); else f.submit(); });
+		});
 		$$('[data-sb-filters-open]').forEach(function (b) { b.addEventListener('click', function () { fl.classList.add('is-open'); fbg.classList.add('is-open'); }); });
 		$$('[data-sb-filters-close]').forEach(function (b) { b.addEventListener('click', function () { fl.classList.remove('is-open'); fbg.classList.remove('is-open'); }); });
 		document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (drawer) { drawer.hidden = true; document.body.style.overflow = ''; } if (fl) { fl.classList.remove('is-open'); fbg.classList.remove('is-open'); } } });

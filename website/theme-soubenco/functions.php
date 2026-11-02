@@ -154,3 +154,10 @@ function sbt_format_bd_number( $digits ) {
 	if ( 13 === strlen( $d ) && 0 === strpos( $d, '880' ) ) return '+880 ' . substr( $d, 3, 4 ) . '-' . substr( $d, 7 );
 	return $d ? '+' . $d : '';
 }
+
+/** Ignore empty price boxes from the shop filter (a blank "max price" would otherwise mean ৳0). */
+add_action( 'init', function () {
+	foreach ( array( 'min_price', 'max_price' ) as $k ) {
+		if ( isset( $_GET[ $k ] ) && '' === trim( (string) $_GET[ $k ] ) ) unset( $_GET[ $k ], $_REQUEST[ $k ] );
+	}
+}, 0 );
