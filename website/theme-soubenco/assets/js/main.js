@@ -357,9 +357,15 @@
 				$$('input', f).forEach(function (i) { if ((i.type === 'number' || i.type === 'hidden' || i.type === 'text') && i.value.trim() === '') i.disabled = true; });
 			});
 		});
-		// Brand / show-only ticks apply straight away.
-		$$('.sb-filters .sb-filter-checks input').forEach(function (c) {
-			c.addEventListener('change', function () { var f = c.form; if (f.requestSubmit) f.requestSubmit(); else f.submit(); });
+		// Every filter applies straight away: ticks on change, price when you leave the box or press Enter.
+		$$('[data-sb-filter-form]').forEach(function (f) {
+			var go = function () { f.classList.add('is-loading'); if (f.requestSubmit) f.requestSubmit(); else { f.dispatchEvent(new Event('submit')); f.submit(); } };
+			$$('input[type=checkbox]', f).forEach(function (c) { c.addEventListener('change', go); });
+			$$('[data-sb-price-input]', f).forEach(function (p) {
+				var start = p.value;
+				p.addEventListener('change', function () { if (p.value !== start) go(); });
+				p.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+			});
 		});
 		$$('[data-sb-filters-open]').forEach(function (b) { b.addEventListener('click', function () { fl.classList.add('is-open'); fbg.classList.add('is-open'); }); });
 		$$('[data-sb-filters-close]').forEach(function (b) { b.addEventListener('click', function () { fl.classList.remove('is-open'); fbg.classList.remove('is-open'); }); });

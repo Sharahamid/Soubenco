@@ -79,6 +79,9 @@ add_action( 'woocommerce_product_query', function ( $q ) {
 	if ( ! empty( $_GET['brand'] ) && taxonomy_exists( 'product_brand' ) ) {
 		$tax[] = array( 'taxonomy' => 'product_brand', 'field' => 'slug', 'terms' => array_map( 'sanitize_title', (array) $_GET['brand'] ) );
 	}
+	if ( ! empty( $_GET['cat'] ) ) {
+		$tax[] = array( 'taxonomy' => 'product_cat', 'field' => 'slug', 'terms' => array_map( 'sanitize_title', (array) $_GET['cat'] ), 'include_children' => true, 'operator' => 'IN' );
+	}
 	if ( ! empty( $_GET['instock'] ) ) {
 		$meta[] = array( 'key' => '_stock_status', 'value' => 'instock' );
 	}
